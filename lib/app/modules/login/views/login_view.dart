@@ -2,16 +2,28 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/app/core/theme/layout_theme.dart';
 
-class LoginView extends GetView {
-  const LoginView({super.key});
+import '../../../core/theme/layout_theme.dart';
+import '../../../core/values/strings.dart';
+import '../controllers/login_controller.dart';
+
+
+class LoginView extends GetView<LoginController> {
+
+  final LoginController _loginController = Get.find<LoginController>();
+
+  void navegateUser() {
+    _loginController.navegateUser();
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlankLayout(
       body: Center(
-        child: Text("Login"),
+        child: ElevatedButton(
+          onPressed: () => {navegateUser()}, 
+            child: Text('Registro', style: TextStyles.normal16,)),
+        
       ),
     );
   }

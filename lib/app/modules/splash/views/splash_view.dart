@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:myapp/app/core/theme/layout_theme.dart';
-import 'package:myapp/app/core/values/strings.dart';
-import 'package:myapp/app/modules/splash/controllers/splash_controller.dart';
+
+import '../../../core/theme/layout_theme.dart';
+import '../../../core/values/strings.dart';
+import '../controllers/splash_controller.dart';
 
 class SplashView extends GetView<SplashController> {
   // ignore: unused_field

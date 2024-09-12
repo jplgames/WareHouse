@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:get/get.dart';
-import 'package:myapp/app/modules/login/bindings/login_binding.dart';
-import 'package:myapp/app/modules/login/views/login_view.dart';
+import 'package:warehouse/app/modules/register/bindings/register_binding.dart';
 
-import 'package:myapp/app/modules/splash/binding/splash_binding.dart';
-import 'package:myapp/app/modules/splash/views/splash_view.dart';
+import '../../modules/login/bindings/login_binding.dart';
+import '../../modules/login/views/login_view.dart';
+import '../../modules/register/views/register_view.dart';
+import '../../modules/splash/binding/splash_binding.dart';
+import '../../modules/splash/views/splash_view.dart';
 import '../../modules/home/binding/home_binding.dart';
 import '../../modules/home/views/home_view.dart';
 
@@ -31,5 +33,9 @@ class AppPages {
       page: () => LoginView(),
       binding: LoginBinding(),
     ),
+    GetPage(
+      name: _Paths.REGISTER, 
+      page: () => RegisterView(), 
+      binding: RegisterBinding())
   ];
 }

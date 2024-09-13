@@ -39,7 +39,7 @@ class DataBaseProvider {
   }
 
   Future _createDB(Database db, int version) async {
-    const idType = "INTENGER PRIMARY KEY AUTOINCREMENT";
+    const idType = "INTEGER PRIMARY KEY AUTOINCREMENT";
     const textType = "TEXT NOT NULL";
     const boolType = "BOOLEAN NOT NULL";
     const integerType = "INTEGER NOT NULL";
@@ -83,5 +83,3 @@ class DataBaseProvider {
     return user.copy(id: insertId);
   }
 }
-
-register(User user) {}

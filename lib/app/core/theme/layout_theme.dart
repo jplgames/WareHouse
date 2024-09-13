@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:warehouse/app/core/values/colors.dart';
 
 class BlankLayout extends StatelessWidget {
   final Widget body;

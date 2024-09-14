@@ -7,6 +7,6 @@ class SplashController extends GetxController {
   SplashController({required this.settingsService});
 
   void navigateUser() {
-    Get.offNamed('/login');
+    Get.offNamed('/home');
   }
 }

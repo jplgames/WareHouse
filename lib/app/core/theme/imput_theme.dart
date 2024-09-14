@@ -22,8 +22,8 @@ class CustomInputField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      margin: const EdgeInsets.only(top: 10),
       child: buildTextFormField(),
-      margin: EdgeInsets.only(top: 10),
     );
   }
 
@@ -58,11 +58,10 @@ class AmountInputField extends StatelessWidget {
   final TextEditingController controller;
   final Function validator;
   const AmountInputField(
-      {Key? key,
+      {super.key,
       required this.onSaved,
       required this.controller,
-      required this.validator})
-      : super(key: key);
+      required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +88,10 @@ class DetailInputField extends StatelessWidget {
   final TextEditingController controller;
   final Function validator;
   const DetailInputField(
-      {Key? key,
+      {super.key,
       required this.onSaved,
       required this.controller,
-      required this.validator})
-      : super(key: key);
+      required this.validator});
 
   @override
   Widget build(BuildContext context) {

@@ -13,7 +13,7 @@ class User {
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     fullName = json['full_name'];
-    userName = json['user_name'];
+    userName = json['username'];
     password = json['password'];
   }
 
@@ -22,7 +22,7 @@ class User {
     final data = <String, dynamic>{};
     //data['id'] = id;
     data['full_name'] = fullName;
-    data['user_name'] = userName;
+    data['username'] = userName;
     data['password'] = password;
     return data;
   }
@@ -30,7 +30,7 @@ class User {
   User copy({int? id, String? fullname, String? username, String? password}) =>
       User(
           id: id ?? this.id,
-          fullName: fullname ?? this.fullName,
-          userName: username ?? this.userName,
+          fullName: fullname ?? fullName,
+          userName: username ?? userName,
           password: password ?? this.password);
 }

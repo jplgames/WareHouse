@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors
-
 import 'package:get/get.dart';
-import 'package:warehouse/app/modules/register/bindings/register_binding.dart';
 
 import '../../modules/login/bindings/login_binding.dart';
 import '../../modules/login/views/login_view.dart';
+import '../../modules/register/bindings/register_binding.dart';
 import '../../modules/register/views/register_view.dart';
 import '../../modules/splash/binding/splash_binding.dart';
 import '../../modules/splash/views/splash_view.dart';

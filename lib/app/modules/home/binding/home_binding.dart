@@ -1,12 +1,12 @@
 import 'package:get/get.dart';
 
-class HomeBinding extends Bindings{
+import '../controllers/home_controller.dart';
+
+class HomeBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => HomeController(), fenix: true);
+    Get.lazyPut<HomeController>(
+      () => HomeController(),
+    );
   }
-}
-
-class HomeController extends GetxController{
-
 }

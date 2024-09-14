@@ -57,16 +57,23 @@ class RegisterView extends GetView {
           ),
         ),
         const SizedBox(height: 40),
-        Form(
-            key: _registerController.formKey,
-            child: Column(
-              children: [
-                fullNameForm(),
-                userNameForm(),
-                passwordForm(),
-                confirmPasswordForm(),
-              ],
-            )),
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              Form(
+                  key: _registerController.formKey,
+                  child: Column(
+                    children: [
+                      fullNameForm(),
+                      userNameForm(),
+                      emailForm(),
+                      passwordForm(),
+                      confirmPasswordForm(),
+                    ],
+                  ))
+            ],
+          ),
+        ),
         const SizedBox(height: 20),
         Obx(() => _registerController.isLoaded.value
             ? const Center(
@@ -79,6 +86,17 @@ class RegisterView extends GetView {
                 title: 'Registre-se',
                 buttonColor: const Color.fromARGB(101, 124, 90, 235),
               )),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Não tem uma conta? '),
+            TextButton(
+                onPressed: () {
+                  Get.toNamed('/login');
+                },
+                child: const Text('Registre-se'))
+          ],
+        )
       ],
     );
   }
@@ -134,6 +152,19 @@ class RegisterView extends GetView {
         _registerController.confirmPasswordController.text = password;
       },
       isHidden: true,
+    );
+  }
+
+  CustomInputField emailForm() {
+    return CustomInputField(
+      hint: 'E-mail',
+      controller: _registerController.emailController,
+      validator: (email) {
+        return _registerController.emailValidation(email);
+      },
+      onSaved: (email) {
+        _registerController.emailController.text = email;
+      },
     );
   }
 }

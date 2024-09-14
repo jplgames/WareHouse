@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:warehouse/app/core/values/strings.dart';
 
 import '../values/colors.dart';
+import '../values/strings.dart';
 
 class SubmitButton extends StatelessWidget {
   final String title;
@@ -38,7 +38,7 @@ class SubmitButton extends StatelessWidget {
 class OnBoardingButton extends StatelessWidget {
   final Function onTap;
 
-  const OnBoardingButton({Key? key, required this.onTap}) : super(key: key);
+  const OnBoardingButton({super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class OnBoardingButton extends StatelessWidget {
           ),
           child: Row(
             children: [
-              SizedBox(width: 20),
+              const SizedBox(width: 20),
               Expanded(
                 child: Text(
                   "Next",
@@ -69,8 +69,8 @@ class OnBoardingButton extends StatelessWidget {
                   style: TextStyles.medium25Black,
                 ),
               ),
-              Icon(Icons.navigate_next),
-              SizedBox(width: 10)
+              const Icon(Icons.navigate_next),
+              const SizedBox(width: 10)
             ],
           ),
         ),

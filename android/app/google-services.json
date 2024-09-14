@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "37175739616",
+    "project_id": "zeus-warehouse-manager",
+    "storage_bucket": "zeus-warehouse-manager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37175739616:android:0ef47edbab9160c2ee3c85",
+        "android_client_info": {
+          "package_name": "zeus.go"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6IO1xSi5Ki-08AMtEA51NYTwZygnT9M8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

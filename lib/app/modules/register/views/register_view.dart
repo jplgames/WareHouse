@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../core/theme/layoutbar.dart';
 import '../../../core/theme/button_theme.dart';
 import '../controllers/register_controller.dart';
 import '../../../core/theme/imput_theme.dart';
-import '../../../core/values/colors.dart';
-import '../../../core/theme/layout_theme.dart';
 
 // ignore: must_be_immutable
 class RegisterView extends GetView {
@@ -21,12 +20,8 @@ class RegisterView extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      appbar: AppBar(
-        toolbarHeight: 0,
-        shadowColor: transparent,
-        backgroundColor: transparent,
-      ),
+    return LayoutBar(
+      route: '/login',
       body: SingleChildScrollView(
         child: Container(
           width: MediaQuery.of(context).size.width,
@@ -42,7 +37,7 @@ class RegisterView extends GetView {
     return Column(
       // Se der BO tira o const :)
       children: [
-        const SizedBox(height: 70),
+        const SizedBox(height: 10),
         Image.asset(
           'assets/images/4396761.png',
           width: 60,

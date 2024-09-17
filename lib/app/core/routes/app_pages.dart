@@ -1,6 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:get/get.dart';
 
+import '../../modules/clients/bindings/clients_binding.dart';
+import '../../modules/clients/views/clients_view.dart';
+import '../../modules/products/binding/products_binding.dart';
+import '../../modules/products/views/products_view.dart';
 import '../../modules/login/bindings/login_binding.dart';
 import '../../modules/login/views/login_view.dart';
 import '../../modules/register/bindings/register_binding.dart';
@@ -33,8 +37,16 @@ class AppPages {
       binding: LoginBinding(),
     ),
     GetPage(
-      name: _Paths.REGISTER, 
-      page: () => RegisterView(), 
-      binding: RegisterBinding())
+        name: _Paths.REGISTER,
+        page: () => RegisterView(),
+        binding: RegisterBinding()),
+    GetPage(
+        name: _Paths.PRODUCTS,
+        page: () => ProductsView(),
+        binding: ProductsBinding()),
+    GetPage(
+        name: _Paths.CLIENTS,
+        page: () => ClientsView(),
+        binding: ClientsBinding())
   ];
 }

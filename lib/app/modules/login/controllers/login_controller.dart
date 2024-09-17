@@ -11,7 +11,6 @@ class LoginController extends GetxController {
 
   final SettingsService settingsService;
   final _auth = FirebaseAuth.instance;
-  final GlobalKey<FormState> loginKey = GlobalKey<FormState>();
 
   LoginController({required this.settingsService});
 
@@ -19,12 +18,24 @@ class LoginController extends GetxController {
 
   void login() async {
     try {
-      _auth.signInWithEmailAndPassword(
+      isLoaded = true.obs;
+      await _auth.signInWithEmailAndPassword(
           email: emailController.text, password: passwordController.text);
       log('Usuario Logado com sucesso');
+      isLoaded = false.obs;
       Get.offNamed('/home');
-    } catch (e) {
-      log('Erro ao efetuar login');
+    } on FirebaseAuthException catch (e) {
+      isLoaded = false.obs;
+      switch (e.message) {
+        case 'invalid-credential':
+          Get.snackbar('WM Erro', 'Usuario não encontrado');
+          break;
+        case 'wrong-password':
+          Get.snackbar('WM Erro', 'Senha incorreta');
+          break;
+        default:
+          Get.snackbar('WM Erro', 'Erro ao logar');
+      }
     }
   }
 

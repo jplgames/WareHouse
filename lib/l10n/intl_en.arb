@@ -1,4 +1,6 @@
 {
     "@@locale": "en",
-    "welcome": "Welcome to"
+    "welcome": "Welcome to",
+    "products": "Products",
+    "clients": "Clients"
 }

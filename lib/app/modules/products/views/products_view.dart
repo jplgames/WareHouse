@@ -10,9 +10,7 @@ class ProductsView extends GetView<ProductsController> {
   @override
   Widget build(BuildContext context) {
     return const LayoutBar(
-        route: '/home',
-        body: Center(
-          child: Text('Produtos'),
-        ));
+        route: '/home', 
+        body: Column(children: [Text('Produtos')]));
   }
 }

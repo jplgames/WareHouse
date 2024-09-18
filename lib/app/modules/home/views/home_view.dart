@@ -45,8 +45,8 @@ class HomeView extends GetView<HomeController> {
                 onPressed: () {
                   Get.offNamed('/products');
                 },
-                child: CardLayoutTheme(
-                  title: '',
+                child: const CardLayoutTheme(
+                  title: 'Produtos', //AppLocalizations.of(context)!.products,
                   image: 'assets/images/4396761.png',
                 ),
               ),

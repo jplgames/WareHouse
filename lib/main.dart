@@ -23,7 +23,7 @@ class Warehouse extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
@@ -37,6 +37,7 @@ class Warehouse extends StatelessWidget {
       darkTheme: MaterialTheme(Theme.of(context).textTheme).dark(),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

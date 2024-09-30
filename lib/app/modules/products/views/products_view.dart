@@ -14,12 +14,13 @@ class ProductsView extends GetView<ProductsController> {
   ProductsView({super.key});
 
   late OverlayEntry _overlayEntry;
+  // ignore: prefer_final_fields
   RxBool _isPressed = false.obs;
   final _productsController = Get.find<ProductsController>();
 
   @override
   Widget build(BuildContext context) {
-    final _products = controller.products;
+    final _products = controller.products.obs;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -51,24 +52,23 @@ class ProductsView extends GetView<ProductsController> {
         ),
         body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Text('Produtos:', style: TextStyle(fontSize: 20)),
-          Expanded(child: Obx(() {
-            if (_products.isEmpty) {
-              return const Center(child: CircularProgressIndicator());
-            } else {
-              return Container(
-                  child: ListView.builder(
-                      padding: const EdgeInsets.all(5),
-                      itemCount: _products.length,
-                      itemBuilder: (context, int index) {
-                        var product = _products[index];
-                        return productsCardModel(
-                            product.name ?? 'Sem Nome',
-                            product.code ?? 'Sem Codigo',
-                            product.price ?? 'Sem preço',
-                            product.data ?? 'Sem data');
-                      }));
-            }
-          })),
+          Expanded(
+              child: Obx(() => Container(
+                  child: _products.value.isEmpty
+                      ? const Center(child: Text('Nenhum produto cadastrado'))
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(5),
+                          itemCount: _products.value.length,
+                          itemBuilder: (context, int index) {
+                            var product = _products.value[index];
+                            return productsCardModel(
+                                product.name ?? 'Sem Nome',
+                                product.code ?? 'Sem Codigo',
+                                product.price ?? 'Sem preço',
+                                product.data ?? 'Sem data',
+                                index,
+                                context);
+                          })))),
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
             Container(
               margin: const EdgeInsets.all(20),
@@ -93,7 +93,7 @@ class ProductsView extends GetView<ProductsController> {
         ]));
   }
 
-  productsCardModel(name, code, price, data) {
+  productsCardModel(name, code, price, data, index, BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
@@ -111,7 +111,7 @@ class ProductsView extends GetView<ProductsController> {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 3,
-            offset: Offset(0, 1), // changes position of shadow
+            offset: const Offset(0, 1), // changes position of shadow
           ),
         ],
       ),
@@ -122,7 +122,7 @@ class ProductsView extends GetView<ProductsController> {
             margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Color(0xD4FFFFFF)),
+                color: const Color(0xD4FFFFFF)),
             width: 75,
             height: 75,
           ),
@@ -161,7 +161,7 @@ class ProductsView extends GetView<ProductsController> {
               ),
               GestureDetector(
                 onTap: () {
-                  log('hello world');
+                  _removeProductOverlay(context, index);
                 },
                 child: const Icon(
                   Icons.remove_circle,
@@ -199,24 +199,20 @@ class ProductsView extends GetView<ProductsController> {
                   _productPriceForm(),
                   _productDateForm(),
                   const SizedBox(height: 20),
-                  Obx(() {
-                    if (!controller.isLoading.value) {
-                      return ElevatedButton(
-                        onPressed: () {
-                          controller.register();
-                        },
-                        child: const Text('Adicionar Produto'),
-                      );
-                    } else {
-                      return const CircularProgressIndicator();
-                    }
-                  }),
-                  Obx(() {
-                    if (!controller.isOverlayVisible.value) {
-                      _overlayEntry.remove();
-                    }
-                    return Container();
-                  })
+                  Obx(
+                    () {
+                      if (controller.isLoading.value) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        return ElevatedButton(
+                          onPressed: () {
+                            controller.register();
+                          },
+                          child: const Text('Registrar produto'),
+                        );
+                      }
+                    },
+                  )
                 ],
               ),
             ),
@@ -224,6 +220,73 @@ class ProductsView extends GetView<ProductsController> {
         ),
       ),
     );
+    Overlay.of(build).insert(_overlayEntry);
+  }
+
+  _removeProductOverlay(
+    BuildContext build,
+    int item,
+  ) async {
+    // ignore: unnecessary_null_comparison
+    if (item < 0 || item >= controller.products.length) {
+      Get.snackbar('[ERRO]', 'Não va tão rapido');
+      return;
+    }
+    log(controller.products[item].name.toString());
+    controller.showOverlay();
+    _overlayEntry = OverlayEntry(
+        builder: (context) => Positioned(
+              top: 100.0,
+              left: 30.0,
+              right: 30.0,
+              child: Material(
+                  color: Colors.white,
+                  elevation: 4.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Center(
+                    child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child:
+                            Column(mainAxisSize: MainAxisSize.min, children: [
+                          const Text('Remover Produto ?'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            children: [
+                              const SizedBox(width: 15),
+                              Obx(() {
+                                if (!controller.deleteProgress.value) {
+                                  return Row(children: [
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          controller.delete(item);
+                                        },
+                                        child: const Text('Remover Produto')),
+                                    const SizedBox(width: 10),
+                                    ElevatedButton(
+                                        onPressed: () {
+                                          _overlayEntry.remove();
+                                        },
+                                        child: const Text('Cancelar'))
+                                  ]);
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              }),
+                            ],
+                          ),
+                          Obx(() {
+                            if (!controller.isOverlayVisible.value) {
+                              _overlayEntry.remove();
+                            }
+                            return Container();
+                          })
+                        ])),
+                  )),
+            ));
     Overlay.of(build).insert(_overlayEntry);
   }
 

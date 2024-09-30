@@ -14,6 +14,8 @@ class ProductsController extends GetxController {
   late RxBool isLoading = false.obs;
   var products = <Product>[].obs;
   RxBool isOverlayVisible = false.obs;
+  RxBool deleteProgress = false.obs;
+  RxBool sucess = false.obs;
 
   TextEditingController productNameController = TextEditingController();
   TextEditingController productCodeController = TextEditingController();
@@ -64,6 +66,7 @@ class ProductsController extends GetxController {
 
   String? productNameValidation(String productName) {
     if (productName.isEmpty) {
+      isLoading.value = false;
       return 'Campo obrigatorio';
     }
     return null;
@@ -71,6 +74,7 @@ class ProductsController extends GetxController {
 
   String? productCodeValidation(String code) {
     if (code.isEmpty) {
+      isLoading.value = false;
       return 'Campo obrigatorio';
     }
     return null;
@@ -78,6 +82,7 @@ class ProductsController extends GetxController {
 
   String? productPriceValidation(String price) {
     if (price.isEmpty) {
+      isLoading.value = false;
       return 'Campo obrigatorio';
     }
     return null;
@@ -85,9 +90,39 @@ class ProductsController extends GetxController {
 
   String? productDataValidation(String data) {
     if (data.isEmpty) {
+      isLoading.value = false;
       return 'Campo obrigatorio';
     }
     return null;
+  }
+
+  Future<void> delete(index) async {
+    deleteProgress.value = true;
+    var product = null;
+    if (products.length >= index) {
+      product = products[index].code;
+      try {
+        await _instance
+            .collection('company')
+            .doc(cnpj)
+            .collection('product')
+            .doc(product)
+            .delete();
+        products.removeAt(index);
+        deleteProgress.value = false;
+        Get.snackbar('[SUCESSO]', 'Produto deletado com sucesso');
+        products.refresh;
+        hideOverlay();
+      } catch (e) {
+        Get.snackbar('[ERRO]', 'Erro ao deletar o produto: $e');
+        hideOverlay();
+      }
+      hideOverlay();
+    } else {
+      Get.snackbar('[ERRO]', 'Erro ao deletar o produto');
+      hideOverlay();
+      return;
+    }
   }
 
   Future<void> register() async {
@@ -120,8 +155,10 @@ class ProductsController extends GetxController {
       productCodeController.clear();
       productPriceController.clear();
       productDataController.clear();
-      isLoading.value = false;
+      await Future.delayed(const Duration(seconds: 2));
       hideOverlay();
+      isLoading.value = false;
+      sucess.value = true;
     } catch (e) {
       isLoading.value = false;
       log('Erro ao cadastrar produto: $e');

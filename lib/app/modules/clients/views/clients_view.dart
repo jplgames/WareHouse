@@ -6,13 +6,18 @@ import '../controllers/clients_controller.dart';
 
 class ClientsView extends GetView<ClientsController> {
   const ClientsView({super.key});
-
   @override
   Widget build(BuildContext context) {
     return const LayoutBar(
         route: '/home',
-        body: Center(
-          child: Text('Clients'),
-        ));
+        body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  
+                ),
+              )
+            ]));
   }
 }

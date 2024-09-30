@@ -1,36 +1,52 @@
-class User {
+class UserModel {
   int? id;
   String? fullName;
   String? userName;
-  String? password;
+  String? identifier;
+  bool? storecnpj;
+  String? permission;
 
-  User(
+  UserModel(
       {this.id,
       required this.fullName,
       required this.userName,
-      required this.password});
+      required this.identifier,
+      this.storecnpj,
+      this.permission});
 
-  User.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    fullName = json['full_name'];
+    fullName = json['fullname'];
     userName = json['username'];
-    password = json['password'];
+    userName = json['identifier'];
+    permission = json['permission'];
+    storecnpj = json['storecnpj'];
   }
 
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:1140358016.
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     //data['id'] = id;
-    data['full_name'] = fullName;
+    data['fullname'] = fullName;
     data['username'] = userName;
-    data['password'] = password;
+    data['identifier'] = userName;
+    data['storecnpj'] = storecnpj;
+    data['permission'] = permission;
     return data;
   }
 
-  User copy({int? id, String? fullname, String? username, String? password}) =>
-      User(
+  UserModel copy(
+          {int? id,
+          String? fullname,
+          String? username,
+          String? identifier,
+          String? permission,
+          bool? haveStore}) =>
+      UserModel(
           id: id ?? this.id,
           fullName: fullname ?? fullName,
           userName: username ?? userName,
-          password: password ?? this.password);
+          identifier: identifier ?? identifier,
+          storecnpj: storecnpj,
+          permission: permission);
 }

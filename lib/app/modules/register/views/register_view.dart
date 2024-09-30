@@ -12,12 +12,6 @@ class RegisterView extends GetView {
 
   final RegisterController _registerController = Get.find<RegisterController>();
 
-  // ignore: non_constant_identifier_names
-  Stringteste() {
-    var teste = 'teste';
-    return teste;
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBar(
@@ -59,11 +53,12 @@ class RegisterView extends GetView {
                   key: _registerController.formKey,
                   child: Column(
                     children: [
-                      fullNameForm(),
-                      userNameForm(),
-                      emailForm(),
-                      passwordForm(),
-                      confirmPasswordForm(),
+                      _fullNameForm(),
+                      _idForm(),
+                      _userNameForm(),
+                      _emailForm(),
+                      _passwordForm(),
+                      _confirmPasswordForm(),
                     ],
                   ))
             ],
@@ -84,19 +79,19 @@ class RegisterView extends GetView {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Não tem uma conta? '),
+            const Text('Ja tem uma conta? '),
             TextButton(
                 onPressed: () {
                   Get.toNamed('/login');
                 },
-                child: const Text('Registre-se'))
+                child: const Text('Login'))
           ],
         )
       ],
     );
   }
 
-  CustomInputField fullNameForm() {
+  CustomInputField _fullNameForm() {
     return CustomInputField(
       hint: 'Nome Completo',
       controller: _registerController.fullnameController,
@@ -109,7 +104,7 @@ class RegisterView extends GetView {
     );
   }
 
-  CustomInputField passwordForm() {
+  CustomInputField _passwordForm() {
     return CustomInputField(
       hint: 'Senha',
       controller: _registerController.passwordController,
@@ -123,9 +118,9 @@ class RegisterView extends GetView {
     );
   }
 
-  CustomInputField userNameForm() {
+  CustomInputField _userNameForm() {
     return CustomInputField(
-      hint: 'Nome de Usuario',
+      hint: 'Nome da empresa',
       controller: _registerController.usernameController,
       validator: (username) {
         return _registerController.userNameValidation(username);
@@ -136,7 +131,7 @@ class RegisterView extends GetView {
     );
   }
 
-  CustomInputField confirmPasswordForm() {
+  CustomInputField _confirmPasswordForm() {
     return CustomInputField(
       hint: 'Confirmar Senha',
       controller: _registerController.confirmPasswordController,
@@ -150,7 +145,7 @@ class RegisterView extends GetView {
     );
   }
 
-  CustomInputField emailForm() {
+  CustomInputField _emailForm() {
     return CustomInputField(
       hint: 'E-mail',
       controller: _registerController.emailController,
@@ -159,6 +154,19 @@ class RegisterView extends GetView {
       },
       onSaved: (email) {
         _registerController.emailController.text = email;
+      },
+    );
+  }
+
+  CustomInputField _idForm() {
+    return CustomInputField(
+      hint: 'CPF/CNPJ',
+      controller: _registerController.idController,
+      validator: (id) {
+        return _registerController.idValidation(id);
+      },
+      onSaved: (id) {
+        _registerController.idController.text = id;
       },
     );
   }

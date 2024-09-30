@@ -1,15 +1,21 @@
 // ignore_for_file: unused_field
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../data/service/setting_service.dart';
+import '../user.dart';
+
+//PUB.DEV pacotes
 
 class RegisterController extends GetxController {
   final SettingsService settingsService;
   final _auth = FirebaseAuth.instance;
+  final _instance = FirebaseFirestore.instance;
 
   RegisterController({required this.settingsService}) {
     settingsService.init();
@@ -19,6 +25,7 @@ class RegisterController extends GetxController {
 
   final TextEditingController fullnameController = TextEditingController();
   final TextEditingController usernameController = TextEditingController();
+  final TextEditingController idController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -71,38 +78,77 @@ class RegisterController extends GetxController {
     return null;
   }
 
+  String? idValidation(String id) {
+    if (id.isEmpty) {
+      return 'Campo obrigatorio';
+    }
+    return null;
+  }
+
   Future<void> register() async {
-    log('[LOG] Cadastrando usuario: ${fullnameController.text}');
+    log('[CONTROLLER] Cadastrando usuario: ${fullnameController.text}');
     final bool isValid = formKey.currentState!.validate();
     if (!isValid) {
       return;
     }
     formKey.currentState!.save();
 
-    isLoaded.value = false;
-
+    isLoaded = false.obs;
     try {
       if (isLoaded.value) {
+        log('[LOG] Logando usuario');
         // ignore: unused_local_variable
-        final UserCredential = await _auth.signInWithEmailAndPassword(
+        await _auth.signInWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
       } else {
+        log('[LOG] Registrando usuario: ${fullnameController.text}');
         // ignore: unused_local_variable
-        final UserCredential = await _auth.createUserWithEmailAndPassword(
+        await _auth.createUserWithEmailAndPassword(
             email: emailController.text, password: passwordController.text);
+
+        // ignore: no_leading_underscores_for_local_identifiers
+        final _userUid = _auth.currentUser!.uid;
+
+        var _user = UserModel(
+          fullName: fullnameController.text,
+          userName: usernameController.text,
+          identifier: idController.text,
+        ).toJson();
+
+        // ignore: unnecessary_null_comparison
+        if (_userUid != null) {
+          try {
+            await _instance.collection('users').doc(_userUid).set(_user);
+            log('Usuario registrado com sucesso: ${fullnameController.text}');
+          } catch (e) {
+            log('Erro ao cadastrar usuario: $e');
+          }
+        }
       }
 
-      log('Usuario registrado com sucesso: ${fullnameController.text}');
       settingsService
           .userAdded([fullnameController.text, usernameController.text]);
       isLoaded.value = true;
-      Get.offNamed('/login');
+
+      FirebaseAuth.instance.authStateChanges().listen((user) {
+        if (user != null) {
+          // Usuário está logado, redirecionar para a tela principal
+          Get.toNamed('/home');
+          isLoaded = false.obs;
+        } else {
+          // Usuário não está logado, redirecionar para a tela de login
+          Get.toNamed('/login');
+          isLoaded = false.obs;
+        }
+      });
     } catch (e) {
       if (e is FirebaseAuthException) {
         if (e.code == 'email-already-in-use') {
-          log('Email ja cadastrado');
+          Get.snackbar('[ERRO]', 'Email ja cadastrado');
         } else if (e.code == 'invalid-email') {
-          log('Email invalido');
+          Get.snackbar('[ERRO]', 'Email Invalido');
+        } else if (e.code == 'weak-password') {
+          Get.snackbar('[ERRO]', 'Senha fraca');
         }
       } else {
         log('Erro ao registrar usuário: $e');
@@ -115,6 +161,7 @@ class RegisterController extends GetxController {
     fullnameController.dispose();
     usernameController.dispose();
     passwordController.dispose();
+    idController.dispose();
     emailController.dispose();
     confirmPasswordController.dispose();
     super.dispose();

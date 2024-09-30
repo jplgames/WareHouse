@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 import 'package:get/get.dart';
 
+import '../../modules/store/bindings/store_binding.dart';
+import '../../modules/store/views/store_view.dart';
 import '../../modules/clients/bindings/clients_binding.dart';
 import '../../modules/clients/views/clients_view.dart';
 import '../../modules/products/binding/products_binding.dart';
@@ -47,6 +49,10 @@ class AppPages {
     GetPage(
         name: _Paths.CLIENTS,
         page: () => ClientsView(),
-        binding: ClientsBinding())
+        binding: ClientsBinding()),
+    GetPage(
+        name: _Paths.STORE, 
+        page: () => StoreView(), 
+        binding: StoreBinding())
   ];
 }

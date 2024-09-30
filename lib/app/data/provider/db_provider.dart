@@ -12,7 +12,7 @@ class DataBaseProvider {
   final SettingsService _settingsService = Get.put(SettingsService());
   String userTableName = "users";
 
-  Future<void> register(User user) async {
+  Future<void> register(UserModel user) async {
     try {
       final docRef = await instance.collection('users').add(user.toJson());
       user.id = docRef.id as int?; // Atribui o ID do documento ao usuário

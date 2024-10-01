@@ -10,6 +10,7 @@ class ProductsController extends GetxController {
   final _auth = FirebaseAuth.instance;
   final FirebaseFirestore _instance = FirebaseFirestore.instance;
   final productskey = GlobalKey<FormState>();
+  final editKey = GlobalKey<FormState>();
   late String cnpj;
   late RxBool isLoading = false.obs;
   var products = <Product>[].obs;
@@ -123,6 +124,63 @@ class ProductsController extends GetxController {
       hideOverlay();
       return;
     }
+  }
+
+  Future<void> edit(code) async {
+    log('[CONTROLLER] Editando produto: ${productNameController.text}');
+    final bool isValid = editKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    editKey.currentState!.save();
+
+    if (code == null) {
+      Get.snackbar('[ERRO]', 'Codigo do produto é nulo');
+      return;
+    }
+    try {
+      isLoading.value = true;
+      if (productNameController.text.isNotEmpty) {
+        await _instance
+            .collection('company')
+            .doc(cnpj)
+            .collection('product')
+            .doc(code)
+            .update({
+          'name': productNameController.text,
+        });
+      } else if (productPriceController.text.isNotEmpty) {
+        await _instance
+            .collection('company')
+            .doc(cnpj)
+            .collection('product')
+            .doc(code)
+            .update({
+          'price': productPriceController.text,
+        });
+      } else if (productDataController.text.isNotEmpty) {
+        await _instance
+            .collection('company')
+            .doc(cnpj)
+            .collection('product')
+            .doc(code)
+            .update({
+          'data': productDataController.text,
+        });
+      } else {
+        Get.snackbar('[ERRO]', 'Nenhum item foi afetado');
+      }
+      isLoading.value = false;
+      hideOverlay();
+      Get.snackbar('[SUCESSO]', 'Produto editado com sucesso');
+    } catch (e) {
+      Get.snackbar('[ERRO]', 'Erro ao cadastrar produto: $e');
+      log('Erro ao cadastrar produto: $e');
+    }
+    productNameController.clear();
+    productCodeController.clear();
+    productPriceController.clear();
+    productDataController.clear();
   }
 
   Future<void> register() async {

@@ -2,6 +2,7 @@
 
 // ignore: unused_import
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -94,83 +95,92 @@ class ProductsView extends GetView<ProductsController> {
   }
 
   productsCardModel(name, code, price, data, index, BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        gradient: const LinearGradient(
-          colors: [
-            Color.fromARGB(255, 216, 71, 245),
-            Color.fromARGB(255, 104, 74, 143)
+    return GestureDetector(
+      onTap: () {
+        log('hello world');
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:2010865486.
+        _editProductOverlay(context, index);
+      },
+      child: Container(
+        margin: const EdgeInsets.only(top: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          gradient: const LinearGradient(
+            colors: [
+              Color.fromARGB(255, 216, 71, 245),
+              Color.fromARGB(255, 104, 74, 143)
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: const Offset(0, 1), // changes position of shadow
+            ),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
         ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 1), // changes position of shadow
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            margin: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: const Color(0xD4FFFFFF)),
-            width: 75,
-            height: 75,
-          ),
-          SizedBox(
-              width: 230,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: const Color(0xD4FFFFFF)),
+              width: 75,
               height: 75,
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                          color: Color(0xFFFFFFFF),
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'CODIGO: $code',
-                      style: const TextStyle(
-                          color: Color(0xFF1D1D1D), fontSize: 10),
-                    )
-                  ])),
-          Container(
-            margin: const EdgeInsets.only(right: 5),
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
-              Text(
-                price,
-                style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 12),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                data,
-                style: const TextStyle(color: Color(0xFFAAAAAA), fontSize: 10),
-              ),
-              GestureDetector(
-                onTap: () {
-                  _removeProductOverlay(context, index);
-                },
-                child: const Icon(
-                  Icons.remove_circle,
-                  color: Color(0xFFAAAAAA),
+            ),
+            SizedBox(
+                width: 230,
+                height: 75,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                            color: Color(0xFFFFFFFF),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'CODIGO: $code',
+                        style: const TextStyle(
+                            color: Color(0xFF1D1D1D), fontSize: 10),
+                      )
+                    ])),
+            Container(
+              margin: const EdgeInsets.only(right: 5),
+              child:
+                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                Text(
+                  price,
+                  style:
+                      const TextStyle(color: Color(0xFFFFFFFF), fontSize: 12),
                 ),
-              )
-            ]),
-          )
-        ],
+                const SizedBox(height: 2),
+                Text(
+                  data,
+                  style:
+                      const TextStyle(color: Color(0xFFAAAAAA), fontSize: 10),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _removeProductOverlay(context, index);
+                  },
+                  child: const Icon(
+                    Icons.remove_circle,
+                    color: Color(0xFFAAAAAA),
+                  ),
+                )
+              ]),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -287,6 +297,90 @@ class ProductsView extends GetView<ProductsController> {
                         ])),
                   )),
             ));
+    Overlay.of(build).insert(_overlayEntry);
+  }
+
+  _editProductOverlay(BuildContext build, int item) async {
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: 100.0,
+        left: 50.0,
+        right: 50.0,
+        child: Material(
+          color: Colors.white,
+          elevation: 4.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _overlayEntry.remove();
+                      },
+                      child: const Icon(Icons.close),
+                    )
+                  ],
+                ),
+                Form(
+                  key: controller.editKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextField(
+                        controller: controller.productNameController,
+                        decoration: const InputDecoration(
+                          labelText: 'Nome do Produto',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: controller.productCodeController,
+                        decoration: const InputDecoration(
+                          labelText: 'Preço do produto',
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: controller.productPriceController,
+                        decoration: const InputDecoration(
+                          labelText: 'Data validade',
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Obx(
+                        () {
+                          controller.showOverlay();
+                          if (controller.isLoading.value &&
+                              controller.isOverlayVisible.value) {
+                            return const CircularProgressIndicator();
+                          } else if (!controller.isOverlayVisible.value) {
+                            _overlayEntry.remove();
+                          } else {
+                            return ElevatedButton(
+                              onPressed: () {
+                                controller.edit(controller.products[item].code);
+                              },
+                              child: const Text('Salvar'),
+                            );
+                          }
+                          return Container();
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
     Overlay.of(build).insert(_overlayEntry);
   }
 

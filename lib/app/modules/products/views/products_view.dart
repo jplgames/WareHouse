@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zeus.go/app/modules/products/views/code_cam.dart';
 import 'package:zeus.go/app/modules/products/views/code_input.dart';
 
 import '../../../core/theme/imput_theme.dart';
@@ -410,8 +411,14 @@ class ProductsView extends GetView<ProductsController> {
       onSaved: (productCode) {
         controller.productCodeController.text = productCode;
       },
-      onTap: () {
-        log('Hello World');
+      onTap: () async {
+        _overlayEntry.remove();
+        controller.hideOverlay();
+        _isPressed.value = false;
+        final barCode = await Get.to(() => CodeCam());
+        if (barCode != null) {
+          controller.productCodeController = barCode;
+        }
       },
     );
   }

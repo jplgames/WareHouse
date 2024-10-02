@@ -28,6 +28,7 @@ dependencies:
   build_runner:
   package_info_plus: ^8.0.2
   cpf_cnpj_validator:
+  flutter_barcode_scanner: ^2.0.0
 
 dev_dependencies:
   flutter_test:

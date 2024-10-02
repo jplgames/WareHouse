@@ -2,6 +2,8 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cpf_cnpj_validator/cnpj_validator.dart';
+import 'package:cpf_cnpj_validator/cpf_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -81,6 +83,8 @@ class RegisterController extends GetxController {
   String? idValidation(String id) {
     if (id.isEmpty) {
       return 'Campo obrigatorio';
+    } else if (!CPFValidator.isValid(id) && !CNPJValidator.isValid(id)) {
+      return 'Credencial invalida';
     }
     return null;
   }
@@ -154,6 +158,12 @@ class RegisterController extends GetxController {
         log('Erro ao registrar usuário: $e');
       }
     }
+    usernameController.clear();
+    fullnameController.clear();
+    passwordController.clear();
+    emailController.clear();
+    confirmPasswordController.clear();
+    idController.clear();
   }
 
   @override

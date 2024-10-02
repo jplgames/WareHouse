@@ -31,21 +31,27 @@ class ProductsController extends GetxController {
       final doc = await _instance.collection('users').doc(userUid).get();
       final data = doc.data() as Map<String, dynamic>;
       cnpj = data['cnpj'];
+
       log('CNPJ: $cnpj');
     } catch (e) {
       log('Erro ao obter dados do cnpj: $e');
+      Get.snackbar('[ERRO]', 'Entre em uma loja');
     }
     fetchProducts();
   }
 
   fetchProducts() async {
-    _instance
-        .collection('/company/00000000000/product')
-        .snapshots()
-        .listen((snapshot) {
-      products.value =
-          snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
-    });
+    try {
+      _instance
+          .collection('/company/$cnpj/product')
+          .snapshots()
+          .listen((snapshot) {
+        products.value =
+            snapshot.docs.map((doc) => Product.fromJson(doc.data())).toList();
+      });
+    } catch (e) {
+      log('Erro ao obter dados do cnpj: $e');
+    }
   }
 
   @override

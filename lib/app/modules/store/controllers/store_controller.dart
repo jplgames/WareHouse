@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cpf_cnpj_validator/cnpj_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,27 +26,25 @@ class StoreController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    final String? cnpj = settingsService.storecnpj.value;
-    if (cnpj == null || cnpj == '') {
-      log('hello world');
-
-      try {
-        final snapshot = await _instance
-            .collection('users')
-            .doc(_auth.currentUser!.uid)
-            .get();
-        if (snapshot.exists) {
-          Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
-          String cnpj = data['cnpj'];
-          log('CNPJ encontrado...');
-          // ignore: unnecessary_null_comparison
-          if (cnpj != null || cnpj != '') {
-            settingsService.storeAdded(cnpj);
-          }
+    late String cnpj;
+    try {
+      final snapshot =
+          await _instance.collection('users').doc(_auth.currentUser!.uid).get();
+      if (snapshot.exists) {
+        Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
+        cnpj = data['cnpj'];
+        log('CNPJ encontrado...');
+        // ignore: unnecessary_null_comparison
+        if (cnpj != null || cnpj != '') {
+          settingsService.storeAdded(cnpj);
         }
-      } catch (e) {
-        log('Erro: $e');
       }
+    } catch (e) {
+      if (e is FirebaseException) {
+        Get.snackbar('[ERRO]', e.message.toString());
+      }
+      settingsService.storeAdded('');
+      log('Erro: $e');
     }
   }
 
@@ -58,7 +57,12 @@ class StoreController extends GetxController {
     return null;
   }
 
-  cnpjValidation(d) {
+  String? cnpjValidation(d) {
+    if (d.isEmpty) {
+      return 'Campo obrigatorio';
+    } else if (!CNPJValidator.isValid(d)) {
+      return 'Credencial invalida';
+    }
     return null;
   }
 
@@ -85,9 +89,9 @@ class StoreController extends GetxController {
     try {
       _instance.collection('company').doc(cnpjNumberController.text).set(store);
       _instance.collection('users').doc(_auth.currentUser!.uid).update({
-        'store': cnpjNumberController.text,
+        'cnpj': cnpjNumberController.text,
       });
-      settingsService.storeAdded(cnpjNumberController.text);      
+      settingsService.storeAdded(cnpjNumberController.text);
       Get.snackbar('Sucesso', 'Loja cadastrada com sucesso');
       Get.toNamed('/home');
     } catch (e) {

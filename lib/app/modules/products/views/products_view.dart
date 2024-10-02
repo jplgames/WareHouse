@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:zeus.go/app/modules/products/views/code_input.dart';
 
 import '../../../core/theme/imput_theme.dart';
 import '../controllers/products_controller.dart';
@@ -192,7 +193,9 @@ class ProductsView extends GetView<ProductsController> {
         left: 50.0,
         right: 50.0,
         child: Material(
-          color: Colors.white,
+          color: context.isDarkMode
+              ? const Color.fromARGB(255, 13, 12, 15)
+              : Colors.white,
           elevation: 4.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -397,8 +400,8 @@ class ProductsView extends GetView<ProductsController> {
     );
   }
 
-  CustomInputField _productCodeForm() {
-    return CustomInputField(
+  CodeInputField _productCodeForm() {
+    return CodeInputField(
       hint: 'Codigo do Produto',
       controller: controller.productCodeController,
       validator: (productCode) {
@@ -406,6 +409,9 @@ class ProductsView extends GetView<ProductsController> {
       },
       onSaved: (productCode) {
         controller.productCodeController.text = productCode;
+      },
+      onTap: () {
+        log('Hello World');
       },
     );
   }

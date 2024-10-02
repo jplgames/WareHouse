@@ -27,6 +27,7 @@ dependencies:
   flutter_gen:
   build_runner:
   package_info_plus: ^8.0.2
+  cpf_cnpj_validator:
 
 dev_dependencies:
   flutter_test:

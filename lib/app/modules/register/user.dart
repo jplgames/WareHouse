@@ -18,9 +18,9 @@ class UserModel {
     id = json['id'];
     fullName = json['fullname'];
     userName = json['username'];
-    userName = json['identifier'];
+    identifier = json['identifier'];
     permission = json['permission'];
-    storecnpj = json['storecnpj'];
+    storecnpj = json['cnpj'];
   }
 
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:1140358016.
@@ -29,8 +29,8 @@ class UserModel {
     //data['id'] = id;
     data['fullname'] = fullName;
     data['username'] = userName;
-    data['identifier'] = userName;
-    data['storecnpj'] = storecnpj;
+    data['identifier'] = identifier;
+    data['cnpj'] = storecnpj;
     data['permission'] = permission;
     return data;
   }

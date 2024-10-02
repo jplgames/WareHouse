@@ -52,7 +52,6 @@ class CustomInputField extends StatelessWidget {
         filled: true);
   }
 }
-
 class AmountInputField extends StatelessWidget {
   final Function onSaved;
   final TextEditingController controller;

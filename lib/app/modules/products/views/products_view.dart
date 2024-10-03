@@ -131,7 +131,7 @@ class ProductsView extends GetView<ProductsController> {
               margin: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Theme.of(context).colorScheme.surface),
+                  color: const Color(0xFFFFFFFF)),
               width: 75,
               height: 75,
             ),
@@ -196,7 +196,7 @@ class ProductsView extends GetView<ProductsController> {
         child: Material(
           color: context.isDarkMode
               ? const Color.fromARGB(255, 13, 12, 15)
-              : Colors.white,
+              : Theme.of(context).colorScheme.surface,
           elevation: 4.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
@@ -254,7 +254,7 @@ class ProductsView extends GetView<ProductsController> {
               left: 30.0,
               right: 30.0,
               child: Material(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                   elevation: 4.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
@@ -311,7 +311,7 @@ class ProductsView extends GetView<ProductsController> {
         left: 50.0,
         right: 50.0,
         child: Material(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.surface,
           elevation: 4.0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),

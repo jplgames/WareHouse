@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+// import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:zeus.go/app/core/theme/layoutbar.dart';
 
@@ -21,11 +21,15 @@ class CodeCam extends GetView {
               const SizedBox(height: 70),
               ElevatedButton(
                   onPressed: () async {
-                    String? barcode = await FlutterBarcodeScanner.scanBarcode(
-                        '#ff6666', 'Cancelar', true, ScanMode.BARCODE);
-                    if (barcode != '-1') {
-                      Get.back(result: barcode);
-                    }
+                    // var barcode = await Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) =>
+                    //           const SimpleBarcodeScannerPage(),
+                    //     ));
+                    // if (barcode != '-1') {
+                    //   Get.back(result: barcode);
+                    // }
                   },
                   child: Text('Escanear codigo de barras.'))
             ],

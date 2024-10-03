@@ -131,7 +131,7 @@ class ProductsView extends GetView<ProductsController> {
               margin: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: const Color(0xD4FFFFFF)),
+                  color: Theme.of(context).colorScheme.surface),
               width: 75,
               height: 75,
             ),

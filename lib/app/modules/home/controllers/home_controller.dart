@@ -51,11 +51,15 @@ class HomeController extends GetxController {
     }
   }
 
-  void logOut() async {
-    await FirebaseAuth.instance
-        .signOut()
-        .then((value) => Get.offNamed('/login'));
-    settingsService.userAdded(null);
-    settingsService.storeAdded('');
+  Future<void> logOut() async {
+    try {
+      await FirebaseAuth.instance
+          .signOut()
+          .then((value) => Get.offNamed('/login'));
+      settingsService.storecnpj('');
+    } catch (e) {
+      Get.snackbar('[ERRO]', 'Algo deu errado :(');
+      log('Erro: $e');
+    }
   }
 }
